@@ -19,6 +19,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
     let p1WIN = localStorage.getItem('p1WIN');
     let p2WIN = localStorage.getItem('p2WIN');
     localStorage.setItem('round', currentRound);
+    let fireballs = [];
+    const fireballPower = 50;
 
     const arenaBgmSrc = localStorage.getItem('gameBgm') || 'assets/normal.png';
     const arenaAudio = document.getElementById('arenaBGM');
@@ -65,6 +67,65 @@ window.addEventListener('DOMContentLoaded', ()=>{
         const imageY = (canvas.height - imageHeight) / 2;
         ctx.drawImage(bgImg, imageX, imageY, imageWidth, imageHeight);
         
+    }
+    // --- FIREBALL OBSTACLES LOGIC ---
+    // Randomly spawn a fireball from the sky (approx. once every 2 seconds at 60fps)
+    if (Math.random() < 0.012 && !roundOver) {
+        fireballs.push({
+            x: Math.random() * (canvas.width - 50),
+            y: -50,
+            width: 45,
+            height: 45,
+            speed: 5 + Math.random() * 3
+        });
+    }
+
+    const fireballImg = new Image();
+    fireballImg.src = 'assets/fire.png'; // Ensure assets/fire.png exists in your project
+
+    for (let i = fireballs.length - 1; i >= 0; i--) {
+        let fb = fireballs[i];
+        fb.y += fb.speed;
+
+        // Draw Fireball
+        if (fireballImg.complete && fireballImg.naturalWidth > 0) {
+            ctx.drawImage(fireballImg, fb.x, fb.y, fb.width, fb.height);
+        } else {
+            // Fallback shape if image is still loading
+            ctx.fillStyle = "#ff4500";
+            ctx.fillRect(fb.x, fb.y, fb.width, fb.height);
+        }
+
+        // Check collision with Player 1 (Using getBodyBox if defined, or player bounds)
+        const p1Box = { x: player1.x + 40, y: player1.y, width: player1.width - 80, height: player1.height };
+        if (
+            fb.x < p1Box.x + p1Box.width &&
+            fb.x + fb.width > p1Box.x &&
+            fb.y < p1Box.y + p1Box.height &&
+            fb.y + fb.height > p1Box.y
+        ) {
+            player1hp = Math.max(0, player1hp - fireballPower);
+            fireballs.splice(i, 1);
+            continue;
+        }
+
+        // Check collision with Player 2
+        const p2Box = { x: player2.x + 40, y: player2.y, width: player2.width - 80, height: player2.height };
+        if (
+            fb.x < p2Box.x + p2Box.width &&
+            fb.x + fb.width > p2Box.x &&
+            fb.y < p2Box.y + p2Box.height &&
+            fb.y + fb.height > p2Box.y
+        ) {
+            player2hp = Math.max(0, player2hp - fireballPower);
+            fireballs.splice(i, 1);
+            continue;
+        }
+
+        // Remove fireball if it falls past the screen floor
+        if (fb.y > canvas.height) {
+            fireballs.splice(i, 1);
+        }
     }
 
     player1.handleInput(keys);

@@ -110,7 +110,6 @@ class Player {
             this.vy = 0;
             this.isGrounded = true;
         }
-        
     }
 
     draw(ctx) {

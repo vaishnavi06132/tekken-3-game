@@ -3,8 +3,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
     const audio = document.getElementById('punch');
     const arenaBgSrc = localStorage.getItem('gameBg') || 'assets/normal.png';
     const p1Name = localStorage.getItem('player1');
-    const p2Name = localStorage.getItem('player2') || 1200;
-    const gameHP = localStorage.getItem('gameHP') || 1200;
+    const p2Name = localStorage.getItem('player2');
+    const gameHP = localStorage.getItem('gameHp');
     let player1hp = gameHP;
     let player2hp = gameHP;
     const maxHP = gameHP;
@@ -173,6 +173,9 @@ function drawHUD(ctx, canvas, p1, p2,player1hp,player2hp,maxHP,currentRound) {
     ctx.textAlign = "left";
     ctx.fillStyle = "#23ce10";
     ctx.font = "bold 18px Arial";
+    ctx.fillText(`Health : ${player1hp}/${maxHP}`, (canvas.width/2)-385, 45);
+    ctx.fillStyle = "#23ce10";
+    ctx.font = "bold 18px Arial";
     ctx.fillText(p1.name, (canvas.width/2)-185, 45);
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
@@ -203,6 +206,9 @@ function drawHUD(ctx, canvas, p1, p2,player1hp,player2hp,maxHP,currentRound) {
     ctx.fillStyle = "#ff4757";
     ctx.font = "bold 18px Arial";
     ctx.fillText(p2.name, (canvas.width/2)+185, 45);
+    ctx.fillStyle = "#ff4757";
+    ctx.font = "bold 18px Arial";
+    ctx.fillText(`Health : ${player1hp}/${maxHP}`, (canvas.width/2)+385, 45);
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
     ctx.fillRect((canvas.width/2)+100, 55, 320, 22);

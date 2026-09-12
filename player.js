@@ -71,12 +71,10 @@ class Player {
 
         if (keys[this.controls.left]) {
             this.vx = -this.speed;
-            this.facing = 'left';
             isWalking = true;
         }
         if (keys[this.controls.right]) {
             this.vx = this.speed;
-            this.facing = 'right';
             isWalking = true;
         }
 
@@ -112,6 +110,7 @@ class Player {
             this.vy = 0;
             this.isGrounded = true;
         }
+        
     }
 
     draw(ctx) {

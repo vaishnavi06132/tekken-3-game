@@ -73,6 +73,14 @@ window.addEventListener('DOMContentLoaded', ()=>{
     player1.update(canvas.height);
     player2.update(canvas.height);
 
+    const collisionDistance = (player1.width + player2.width) / 2 - 120;
+    const currentDistance = player2.x - player1.x;
+    if (currentDistance < collisionDistance) {
+        const overlap = collisionDistance - currentDistance;
+        player1.x -= overlap / 2;
+        player2.x += overlap / 2;
+    }
+
     player1.draw(ctx);
     player2.draw(ctx);
 
